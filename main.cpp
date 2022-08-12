@@ -24,15 +24,16 @@ int main() {
     std::tm nowTime = *std::localtime (&t);
     time_t timeOffset = (timer.tm_min*60 + timer.tm_sec);
     time_t EndTime = time (nullptr) + timeOffset;
+    EndTime -= nowTime.tm_min*60 + nowTime.tm_sec;
 
-
-    for (int i = (int) timeOffset ; ; i--) {
+    for (int i =0 ; ; i++) {
         time_t temp = time (nullptr);
-        if(temp - EndTime == 0) {cout << "DING! DING! DING!\n";Sleep(2000);break;}
-        int min =  ((int) timeOffset -i) /60;
-        int sec = ((int) timeOffset-i)%60;
-        cout << min << ":" << sec;
-        Sleep(900);
+        time_t zero = temp - (nowTime.tm_min*60 + nowTime.tm_sec);
+        if(zero - EndTime == 0) {cout << "DING! DING! DING!\n";Sleep(1000);break;}
+        time_t Offset = EndTime - (EndTime - zero);
+        tm* Counter = std::localtime (&Offset);
+        cout << put_time(Counter, "%M:%S");
+        Sleep(500);
         system("cls");
     }
 }
